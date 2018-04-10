@@ -1,0 +1,125 @@
+<meta charset="UTF-8">
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+    Bus stop<input type="text" name="Busno" id="stopid">
+    <button id="button">button</button>
+
+    <div id="container" style="padding: 40px;">
+
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#button").click(function() {
+                $("#timingstable").remove();
+
+                var table = '<table id="timingstable" class="table table-striped table-bordered" style="width:100%"> <thead> <tr> <th>Origin</th> <th>Destination</th> <th>Due</th> <th>Direction</th> <th>Route</th> <th>Arrival Time</th> </tr></thead> <tbody id="tbody"> </tbody> </table>';
+
+                $('#container').append(table);
+
+                var id = document.getElementById('stopid').value;
+
+                var url = 'https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=' + id + '&format=json';
+                
+                
+                 $.get(url, function(data, status) {
+                    
+                    //console.log(data.results[0]);
+                    tableContent = "";
+                    
+                    
+                    jQuery.each(data.results, function(i, data) {
+                        row = "<tr>" +
+                            "<td>" + data.origin + "</td>" +
+                            "<td>" + data.destination + "</td>" +
+                            "<td>" + data.duetime + "</td>" +
+                            "<td>" + data.direction + "</td>" +
+                            "<td>" + data.route + "</td>" +
+                            "<td>" + data.scheduledarrivaldatetime + "</td>" +
+                            +" </tr>"
+                        $("#timingstable").append(row);
+                    });
+                    
+                    jQuery.each(data.results, function(i, data) {
+        
+                   })
+
+                });
+                /*$.get(url, function(data, status) {
+                    
+                    //console.log(data.results[0]);
+                    
+                    var origin = data.getElementsByTagName('origin')[0];
+                    console.log(origin);
+                    var destination = data.getElementsByTagName('destination')[0];
+                    console.log(destination);
+                    var duetime = data.getElementsByTagName('duetime')[0];
+                    console.log(duetime);
+                    var direction = data.getElementsByTagName('direction')[0];
+                   // console.log(direction);
+                    var route = data.getElementsByTagName('route')[0];
+                    //console.log(route);
+                    var arrival = data.getElementsByTagName('scheduledarrivaldatetime')[0];
+                   // console.log(arrival);
+                    
+                    tableContent = "";
+                    jQuery.each(data.results, function(i, data) {
+                         console.log("sonething");
+                        row = "<tr>" +
+                            "<td>" + data.getElementsByTagName('origin')+ "</td>" +
+                            "<td>" + data.getElementsByTagName('destination') + "</td>" +
+                            "<td>" + data.getElementsByTagName('duetime') + "</td>" +
+                            "<td>" + data.getElementsByTagName('direction') + "</td>" +
+                            "<td>" + data.getElementsByTagName('route') + "</td>" +
+                            "<td>" + data.getElementsByTagName('scheduledarrivaldatetime') + "</td>" +
+                            +" </tr>"
+                        $("#timingstable").append(row);
+                    });
+                }); */
+            });
+        });
+         /*  $.get(url, function(data, status) {
+                    
+                    console.log(data.results[0]);
+                    
+                    var origins = data.getElementsByTagName('origin');
+                    console.log(origins.childNodes);
+                    
+                    tableContent = "";
+                    
+                     json
+                    jQuery.each(data.results, function(i, data) {
+                        row = "<tr>" +
+                            "<td>" + data.origin + "</td>" +
+                            "<td>" + data.destination + "</td>" +
+                            "<td>" + data.duetime + "</td>" +
+                            "<td>" + data.direction + "</td>" +
+                            "<td>" + data.route + "</td>" +
+                            "<td>" + data.scheduledarrivaldatetime + "</td>" +
+                            +" </tr>"
+                        $("#timingstable").append(row);
+                    });
+                    
+                    jQuery.each(data.results, function(i, data) {
+        
+                   })
+
+                });
+*/
+    </script>
+
+</body>
+
+</html>

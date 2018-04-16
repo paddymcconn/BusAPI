@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+<body>
+    
+    <form>
+        <input id="stopid" type="text">
+        <input type="submit" value="submit" onclick="loadXMLDoc()">
+    </form>
+    <button type="button" onclick="loadXMLDoc()">Get Bus stop information</button>
+    <div id="container"></div>
+
+    <script>
+        function loadXMLDoc() {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    displayRealTimeInfo(this);
+                }
+            };
+            var id = document.getElementById("stopid").submit();
+            xmlhttp.open("GET", "https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=" + id + "&format=xml", true);
+            xmlhttp.send();
+        }
+
+        function displayRealTimeInfo(xml) {
+            var i;
+            var xmlDoc = xml.responseXML; 
+            var table = '<table id="timingstable" class="table table-striped table-bordered" style="width:100%"> <thead> <tr> <th>Origin</th> <th>Destination</th> <th>Due</th> <th>Direction</th> <th>Route</th> <th>Arrival Time</th> </tr></thead> <tbody id="tbody"> </tbody> </table>';
+            
+            $('#container').append(table);
+            
+            
+            var nodes = xmlDoc.getElementsByTagName("result");
+            for (i = 0; i < nodes.length; i++) {
+                var row = "<tr><td>" +
+                    nodes[i].getElementsByTagName("origin")[0].childNodes[0].nodeValue +
+                    "</td><td>" +
+                    nodes[i].getElementsByTagName("destination")[0].childNodes[0].nodeValue +
+                    "</td><td>"+
+                    nodes[i].getElementsByTagName("duetime")[0].childNodes[0].nodeValue +
+                    "</td><td>"+
+                    nodes[i].getElementsByTagName("direction")[0].childNodes[0].nodeValue +
+                    "</td><td>" +
+                    nodes[i].getElementsByTagName("route")[0].childNodes[0].nodeValue +
+                    "</td><td>"+
+                    nodes[i].getElementsByTagName("scheduledarrivaldatetime")[0].childNodes[0].nodeValue +
+                    "</td></tr>";
+                
+                $("#timingstable").append(row);
+            
+            }
+            
+            
+        }
+    </script>
+
+</body>
+</html>
